@@ -19,7 +19,8 @@ const productsData = [
     description: "قفل إلكتروني متطور للغرف الفندقية يعمل بالبطاقات الممغنطة وتشفير RFID الأمني.",
     color: "ذهبي",
     size: "قياسي",
-    code: "1007474"
+    code: "1007476"
+
   },
   // 0.2
   {
@@ -627,32 +628,6 @@ const productsData = [
     code: "BTS"
   },
 
-  // ==========================================
-  // 3. قسم الأقفال والأنظمة الذكية (locks)
-  // Subcategories: smart-locks, energy-savers
-  // ==========================================
-  {
-    id: "lock-01",
-    category: "locks",
-    subcategory: "smart-locks",
-    title: "كالون إلكتروني فندقي",
-    image: "assets/images/products/01-locks/Asset 23.png",
-    description: "قفل إلكتروني متطور للغرف الفندقية يعمل بالبطاقات الممغنطة وتشفير RFID.",
-    color: "أسود فاخر / فضي",
-    size: "قياسي",
-    code: "LK.E23"
-  },
-  {
-    id: "lock-02",
-    category: "locks",
-    subcategory: "energy-savers",
-    title: "نظام تحكم وموفر طاقة فندقي",
-    image: "assets/images/products/01-locks/Asset 24.png",
-    description: "وحدة تحكم ذكية بغرف الضيوف وموفر طاقة يعمل ببطاقات الكروت الفندقية.",
-    color: "أبيض / أسود",
-    size: "86*86 مم",
-    code: "LK.ES24"
-  },
   // trash 
   {
   id: "trash-100black",

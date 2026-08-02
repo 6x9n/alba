@@ -102,8 +102,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const host = document.getElementById('productSections');
     if (!host || typeof productsData === 'undefined' || !Array.isArray(productsData)) return;
 
+    const nonLocks = productsData.filter((p) => p.category !== 'locks');
+    const locksOnly = productsData.filter((p) => p.category === 'locks').slice(-2);
+    const source = [...nonLocks, ...locksOnly];
+
     const seen = new Set();
-    const items = productsData.filter((p) => {
+    const items = source.filter((p) => {
       if (!p || !p.id || seen.has(p.id)) return false;
       seen.add(p.id);
       return true;
