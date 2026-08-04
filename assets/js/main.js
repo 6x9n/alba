@@ -25,6 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
     'safes': 'خزائن الأمانات',
     'kettles': 'غلايات الشاي',
     'bathroom-acc': 'مستلزمات الحمام',
+    'health-tools': 'ادوات الصحيه',
     'lobby': 'تجهيزات اللوبي',
     'room-acc': 'مستلزمات الغرف',
     'housekeeping': 'عربات التنظيف',
@@ -83,15 +84,10 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const attachImageFallback = (img) => {
-    const original = img.getAttribute('src');
     img.addEventListener('error', () => {
       const tried = parseInt(img.dataset.fallback || '0', 10);
       if (tried === 0) {
         img.dataset.fallback = '1';
-        const fileName = String(original || '').split('/').pop();
-        if (fileName) img.src = `${PRODUCT_IMG_DIR}${fileName}`;
-      } else {
-        img.dataset.fallback = '2';
         img.src = PLACEHOLDER_IMG;
         if (img.alt && !img.alt.includes('الصورة قيد التحديث')) {
           img.alt += ' — الصورة قيد التحديث';
