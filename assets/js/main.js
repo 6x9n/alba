@@ -5,12 +5,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* ---- Products page: data-driven rendering (categories + sub-categories) ---- */
   const CATEGORY_META = {
-    locks:       { label: 'الأقفال والأنظمة الذكية' },
-    furniture:   { label: 'الأثاث والديكور الفندقي' },
-    furnishings: { label: 'المفروشات والمناشف' },
-    equipment:   { label: 'معدات وأدوات الضيافة' },
-    trolleys:    { label: 'عربات الخدمة' },
-    hardware:    { label: 'مستلزمات الأبواب' }
+    locks:       { label: 'الأقفال وأنظمة الدخول الذكية' },
+    furniture:   { label: 'الأثاث والتجهيزات الفندقية' },
+    furnishings: { label: 'البياضات والمفروشات الفندقية' },
+    equipment:   { label: 'معدات التشغيل ومستلزمات الغرف' },
+    trolleys:    { label: 'عربات الخدمة والنقل' },
+    hardware:    { label: 'مستلزمات الأقفال والأبواب' }
   };
 
   const SUBCATEGORY_LABELS = {
@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
     'tables': 'الطاولات',
     'bedding': 'المفروشات والبياضات',
     'towels': 'المناشف والأرواب',
-    'trash-cans': 'سلال المهملات',
+    'trash-cans': 'سلة المهملات',
     'safes': 'خزائن الأمانات',
     'kettles': 'غلايات الشاي',
     'bathroom-acc': 'مستلزمات الحمام',
@@ -29,8 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
     'room-acc': 'مستلزمات الغرف',
     'housekeeping': 'عربات التنظيف',
     'luggage': 'عربات الحقائب',
-    'handles': 'المقابض',
-    'locks': 'أقفال الأبواب',
+    'locks': 'أقفال وأبواب',
     'accessories': 'الإكسسوارات'
   };
 
@@ -60,9 +59,9 @@ document.addEventListener("DOMContentLoaded", () => {
     .replace(/"/g, '&quot;');
 
   const buildProductCard = (p) => {
-    const name = p.title || p.name || 'منتج';
+    const name = p.title || p.name || 'منتج متاح للطلب';
     const imgSrc = p.image || '';
-    const quoteHref = `${WHATSAPP_BASE}${encodeURIComponent(`السلام عليكم، أرغب بالاستفسار عن سعر منتج: ${name}`)}`;
+    const quoteHref = `${WHATSAPP_BASE}${encodeURIComponent(`أهلاً، أرغب بطلب عرض سعر وتوفر لـ «${name}» — مع إمكانية تزويدكم بكمية المنشأة.`)}`;
     const specs = [
       p.color ? `اللون: ${p.color}` : '',
       p.size ? `المقاس: ${p.size}` : '',
@@ -76,7 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <p class="product-desc">${escapeHtml(p.description || '')}</p>
         ${specs}
         <div class="product-actions">
-          <a class="product-quote" href="${quoteHref}" target="_blank" rel="noreferrer" aria-label="استعلم عن سعر ${escapeHtml(name)} عبر واتساب">${WHATSAPP_SVG}<span>استعلم عن السعر</span></a>
+          <a class="product-quote" href="${quoteHref}" target="_blank" rel="noreferrer" aria-label="اطلب سعر ${escapeHtml(name)} الآن عبر واتساب">${WHATSAPP_SVG}<span>اطلب سعراً الآن</span></a>
           <button type="button" class="product-view" aria-label="عرض تفاصيل ${escapeHtml(name)}">${EYE_SVG}</button>
         </div>
       </div>
@@ -94,6 +93,9 @@ document.addEventListener("DOMContentLoaded", () => {
       } else {
         img.dataset.fallback = '2';
         img.src = PLACEHOLDER_IMG;
+        if (img.alt && !img.alt.includes('الصورة قيد التحديث')) {
+          img.alt += ' — الصورة قيد التحديث';
+        }
       }
     });
   };
@@ -102,9 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const host = document.getElementById('productSections');
     if (!host || typeof productsData === 'undefined' || !Array.isArray(productsData)) return;
 
-    const nonLocks = productsData.filter((p) => p.category !== 'locks');
-    const locksOnly = productsData.filter((p) => p.category === 'locks').slice(-2);
-    const source = [...nonLocks, ...locksOnly];
+    const source = [...productsData];
 
     const seen = new Set();
     const items = source.filter((p) => {
@@ -150,7 +150,7 @@ document.addEventListener("DOMContentLoaded", () => {
         body = `<div class="product-grid">${byCategory[cat].map(buildProductCard).join('')}</div>`;
       }
 
-      return `<section class="product-category category-section" id="category-${cat}" data-category="${cat}">
+      return `<section class="product-category category-section" id="${cat}" data-category="${cat}">
         <h2 class="category-heading">
           <span class="category-heading-icon">${CATEGORY_ICONS[cat] || ''}</span>
           ${escapeHtml(meta.label)}
@@ -172,14 +172,20 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll('.product-category').forEach((section) => {
       const visible = activeFilter === 'all' || section.dataset.category === activeFilter;
       section.classList.toggle('is-hidden', !visible);
+      section.hidden = !visible;
       if (visible) visibleCount += 1;
     });
-    if (PRODUCT_EMPTY) PRODUCT_EMPTY.classList.toggle('is-visible', visibleCount === 0);
+
+    if (PRODUCT_EMPTY) {
+      PRODUCT_EMPTY.classList.toggle('is-visible', visibleCount === 0);
+      PRODUCT_EMPTY.hidden = visibleCount !== 0;
+    }
   };
 
   const initFilters = (categories) => {
     if (!filterHost) return;
-    const buttons = ['all', ...categories].map((cat) => {
+    const uniqueCategories = [...new Set(['all', ...(categories || [])])];
+    const buttons = uniqueCategories.map((cat) => {
       const label = cat === 'all' ? 'الكل' : (CATEGORY_META[cat] || { label: cat }).label;
       const active = cat === 'all';
       return `<button type="button" class="filter-btn${active ? ' is-active' : ''}" data-filter="${cat}" aria-pressed="${active}">${escapeHtml(label)}</button>`;
@@ -187,7 +193,7 @@ document.addEventListener("DOMContentLoaded", () => {
     filterHost.innerHTML = buttons.join('');
   };
 
-  if (productSectionsHost) {
+  if (productSectionsHost && filterHost) {
     const categories = renderProducts() || [];
     initFilters(categories);
     filterHost.addEventListener('click', (e) => {
@@ -545,36 +551,36 @@ document.addEventListener("DOMContentLoaded", () => {
   ];
 
   const testimonialsData = [
-    { id: 1, name: "أ. محمد العتيبي", role: "مدير المشتريات - فندق هيلتون", rating: 5, comment: "تعاملنا مع ألبا برو في تجهيز أكثر من 150 غرفة فندقية. الجودة كانت ممتازة والتسليم في الوقت المحدد. أنصح بالتعامل معهم." },
+    { id: 1, name: "أ. محمد العتيبي", role: "مدير المشتريات - فندق هيلتون", rating: 5, comment: "تعاملنا مع البا الحديثة التجارية في تجهيز أكثر من 150 غرفة فندقية. الجودة كانت ممتازة والتسليم في الوقت المحدد. أنصح بالتعامل معهم." },
     { id: 2, name: "أ. فهد القحطاني", role: "المدير التنفيذي - فندق ماريوت", rating: 5, comment: "من أفضل شركات التجهيزات الفندقية في المملكة. منتجات عالية الجودة وخدمة عملاء ممتازة. سعداء بالتعاون المستمر." },
     { id: 3, name: "م. سارة الدوسري", role: "مشرف التجهيزات - فندق حياة", rating: 5, comment: "تم تنفيذ المشروع بكل احترافية. التصاميم راقية والخامات ممتازة. فريق العمل متعاون وملتزم بأعلى المعايير." },
-    { id: 4, name: "أ. عبدالله السبيعي", role: "مدير الفندق - فندق الشرق", rating: 5, comment: "شغل ممتاز وجودة عالية. وفرنا وقت وجهد لما اخترنا ألبا برو. صراحة ناسبينا في كل متطلبات التجهيز." },
+    { id: 4, name: "أ. عبدالله السبيعي", role: "مدير الفندق - فندق الشرق", rating: 5, comment: "شغل ممتاز وجودة عالية. وفرنا وقت وجهد لما اخترنا البا الحديثة التجارية. صراحة ناسبينا في كل متطلبات التجهيز." },
     { id: 5, name: "م. خالد الزهراني", role: "مدير المشاريع - منتجع النخيل", rating: 5, comment: "تعاملنا معهم في تجهيز 3 منتجعات. التزامهم بالمواعيد وجودة المنتجات شيء يذكر فيشكر. نتمنى لهم التوفيق." },
-    { id: 6, name: "أ. نايف المطيري", role: "مساعد المدير - فندق كودي تاور", rating: 5, comment: "ألبا برو خيارنا الأول في التجهيزات الفندقية. أسعار منافسة وجودة ممتازة. فريق المبيعات محترف وودود." },
-    { id: 7, name: "أ. بندر الشمري", role: "المدير الإقليمي - مجموعة فنادق راديسون", rating: 5, comment: "نشكر ألبا برو على الاحترافية العالية في التجهيز والتسليم. منتجاتهم تفوق التوقعات والخدمة ممتازة جداً." },
+    { id: 6, name: "أ. نايف المطيري", role: "مساعد المدير - فندق كودي تاور", rating: 5, comment: "البا الحديثة التجارية خيارنا الأول في التجهيزات الفندقية. أسعار منافسة وجودة ممتازة. فريق المبيعات محترف وودود." },
+    { id: 7, name: "أ. بندر الشمري", role: "المدير الإقليمي - مجموعة فنادق راديسون", rating: 5, comment: "نشكر البا الحديثة التجارية على الاحترافية العالية في التجهيز والتسليم. منتجاتهم تفوق التوقعات والخدمة ممتازة جداً." },
     { id: 8, name: "م. تركي الحربي", role: "مهندس مشاريع - فندق الريتز كارلتون", rating: 5, comment: "من أفضل الموردين اللي تعاملنا معهم. التزام تام بالمواصفات وأسعار تنافسية. فريق مميز في المتابعة والتركيب." },
-    { id: 9, name: "أ. يوسف الغامدي", role: "مدير اللوجستيك - فنادق روتانا", rating: 5, comment: "تعاون مستمر من سنين مع ألبا برو. مصداقية وجودة عالية في كل طلبية. صراحة شريك نجاح حقيقي." },
-    { id: 10, name: "أ. مشاري الدوسري", role: "مالك - مجموعة شقق الفرسان", rating: 5, comment: "تجهيز 4 فروع للشقق الفندقية في وقت قياسي وبجودة ممتازة. ألبا برو أثبتت قدرتها على تنفيذ المشاريع الكبيرة." },
+    { id: 9, name: "أ. يوسف الغامدي", role: "مدير اللوجستيك - فنادق روتانا", rating: 5, comment: "تعاون مستمر من سنين مع البا الحديثة التجارية. مصداقية وجودة عالية في كل طلبية. صراحة شريك نجاح حقيقي." },
+    { id: 10, name: "أ. مشاري الدوسري", role: "مالك - مجموعة شقق الفرسان", rating: 5, comment: "تجهيز 4 فروع للشقق الفندقية في وقت قياسي وبجودة ممتازة. البا الحديثة التجارية أثبتت قدرتها على تنفيذ المشاريع الكبيرة." },
     { id: 11, name: "م. هاني الزهراني", role: "استشاري ضيافة", rating: 5, comment: "أنصح وبشدة بالتعامل معهم. أثاث فندقي بخامات ممتازة وتصاميم عصرية. فريقهم يقدم استشارات احترافية قبل الشراء." },
     { id: 12, name: "أ. سعود المالكي", role: "المالك - فندق البستان", rating: 5, comment: "تم تجهيز فندقنا بالكامل خلال 3 أشهر فقط. كفاءة عالية في إدارة المشروع والتنسيق مع المقاولين. نتائج مبهرة." },
-    { id: 13, name: "أ. راشد العجمي", role: "مدير العمليات - منتجع رمال", rating: 5, comment: "ما قصرت ألبا برو معانا من أول استفسار إلى تسليم آخر قطعة. أخلاق عالية وخدمة عملاء ممتازة، الله يوفقهم." },
+    { id: 13, name: "أ. راشد العجمي", role: "مدير العمليات - منتجع رمال", rating: 5, comment: "ما قصرت البا الحديثة التجارية معانا من أول استفسار إلى تسليم آخر قطعة. أخلاق عالية وخدمة عملاء ممتازة، الله يوفقهم." },
     { id: 14, name: "أ. حمد البقمي", role: "شيف تنفيذي - فندق كراون بلازا", rating: 5, comment: "تعاقدنا معهم لتجهيز 3 مطاعم فندقية. الجهد اللي بذلوه في التصميم والتجهيز شيء يستحق الإشادة. نشكرهم على الالتزام." },
-    { id: 15, name: "م. فيصل العتيبي", role: "المدير العام - منتجع وشاليهات المرجان", rating: 5, comment: "خبرتنا مع ألبا برو كانت ممتازة جداً. من أول اجتماع إلى التركيب والتشغيل، كل شيء كان منظم واحترافي. فخورين بشراكتنا معهم." },
+    { id: 15, name: "م. فيصل العتيبي", role: "المدير العام - منتجع وشاليهات المرجان", rating: 5, comment: "خبرتنا مع البا الحديثة التجارية كانت ممتازة جداً. من أول اجتماع إلى التركيب والتشغيل، كل شيء كان منظم واحترافي. فخورين بشراكتنا معهم." },
     { id: 16, name: "أ. سلطان المطلق", role: "مالك - فندق الريف", rating: 5, comment: "أثاث فندقي بجودة ممتازة وأسعار منافسة. ساعدونا في تجهيز فندقنا بالكامل خلال وقت قياسي. نشكرهم على الاحترافية." },
-    { id: 17, name: "أ. محمد الحارثي", role: "مدير المشتريات - مجموعة فنادق الخليج", rating: 5, comment: "تعاملنا مع ألبا برو من سنين، وما قصروا معانا أبداً. جودة منتجات وخدمة عملاء ممتازة. أنصح بالتعامل معهم بدون تردد." },
-    { id: 18, name: "م. عبدالعزيز السعيد", role: "مدير المشاريع - منتجع الواحة", rating: 5, comment: "فريق ألبا برو محترف جداً. ساعدونا في تجهيز 5 منتجعات في وقت قياسي وبأعلى جودة. صراحة شركاء نجاح حقيقيين." },
-    { id: 19, name: "أ. خالد العواد", role: "المالك - فندق الوشم", rating: 5, comment: "اخترت ألبا برو بناءً على توصية وبالفعل ما خابت. تجهيز متكامل للفندق بمواصفات عالمية وأسعار معقولة. شكراً لفريق العمل." },
+    { id: 17, name: "أ. محمد الحارثي", role: "مدير المشتريات - مجموعة فنادق الخليج", rating: 5, comment: "تعاملنا مع البا الحديثة التجارية من سنين، وما قصروا معانا أبداً. جودة منتجات وخدمة عملاء ممتازة. أنصح بالتعامل معهم بدون تردد." },
+    { id: 18, name: "م. عبدالعزيز السعيد", role: "مدير المشاريع - منتجع الواحة", rating: 5, comment: "فريق البا الحديثة التجارية محترف جداً. ساعدونا في تجهيز 5 منتجعات في وقت قياسي وبأعلى جودة. صراحة شركاء نجاح حقيقيين." },
+    { id: 19, name: "أ. خالد العواد", role: "المالك - فندق الوشم", rating: 5, comment: "اخترت البا الحديثة التجارية بناءً على توصية وبالفعل ما خابت. تجهيز متكامل للفندق بمواصفات عالمية وأسعار معقولة. شكراً لفريق العمل." },
     { id: 20, name: "م. عبدالرحمن الفوزان", role: "مشرف الضيافة - فندق ميلينيوم", rating: 5, comment: "احترافية عالية في التنفيذ والمتابعة. الأثاث والتجهيزات فاقت توقعاتنا. نتعامل معهم من سنتين وما تغيرت الجودة أبداً." },
-    { id: 21, name: "أ. سامي الجهني", role: "مدير عام - منتجع أمواج", rating: 5, comment: "تجهيز المنتجع بالكامل كان تجربة رائعة. ألبا برو فهمت رؤيتنا ونفذتها بشكل يفوق التوقعات. التوصيل والتركيب في الوقت المحدد." },
+    { id: 21, name: "أ. سامي الجهني", role: "مدير عام - منتجع أمواج", rating: 5, comment: "تجهيز المنتجع بالكامل كان تجربة رائعة. البا الحديثة التجارية فهمت رؤيتنا ونفذتها بشكل يفوق التوقعات. التوصيل والتركيب في الوقت المحدد." },
     { id: 22, name: "أ. ماجد الشهراني", role: "المدير المالي - مجموعة فنادق الأحساء", rating: 5, comment: "أسعار منافسة جداً مع جودة ممتازة. العروض اللي يقدمونها حصرية وتناسب الميزانيات التشغيلية. أنصح بالتعامل معهم." },
-    { id: 23, name: "م. ناصر القاسم", role: "استشاري معماري", rating: 5, comment: "أرشح ألبا برو لكل مشاريعي. منتجاتهم تواكب أحدث trends في عالم الضيافة. الخامات ممتازة والتصاميم حرفية. فخور بشراكتنا." },
-    { id: 24, name: "أ. فيصل المبارك", role: "مالك - فندق بوتيك الخبر", rating: 5, comment: "بما أن فندقي بوتيك صغير، احتجت تجهيزات خاصة ومميزة. ألبا برو فهمت احتياجي وقدموا حلول مبتكرة وراقية جداً." },
-    { id: 25, name: "أ. طلال الحميد", role: "مدير العمليات - فنادق موفنبيك", rating: 5, comment: "التزام ألبا برو بالجودة والمواعيد شيء يحترم. خلصنا المشروع في الوقت المحدد بدون أي تأخير ومنتجاتهم ممتازة." },
+    { id: 23, name: "م. ناصر القاسم", role: "استشاري معماري", rating: 5, comment: "أرشح البا الحديثة التجارية لكل مشاريعي. منتجاتهم تواكب أحدث trends في عالم الضيافة. الخامات ممتازة والتصاميم حرفية. فخور بشراكتنا." },
+    { id: 24, name: "أ. فيصل المبارك", role: "مالك - فندق بوتيك الخبر", rating: 5, comment: "بما أن فندقي بوتيك صغير، احتجت تجهيزات خاصة ومميزة. البا الحديثة التجارية فهمت احتياجي وقدموا حلول مبتكرة وراقية جداً." },
+    { id: 25, name: "أ. طلال الحميد", role: "مدير العمليات - فنادق موفنبيك", rating: 5, comment: "التزام البا الحديثة التجارية بالجودة والمواعيد شيء يحترم. خلصنا المشروع في الوقت المحدد بدون أي تأخير ومنتجاتهم ممتازة." },
     { id: 26, name: "م. بدر السالم", role: "مشرف فندقي - فندق هوليدي إن", rating: 5, comment: "خدمة ما بعد البيع عندهم ممتازة. أي استفسار أو طلب صيانة يتم التعامل معه بسرعة واحترافية. فريق يستحق الثقة." },
     { id: 27, name: "أ. محمد الرشيد", role: "المالك - شقق فندقية الرياض", rating: 5, comment: "جهزوا لي 50 شقة فندقية بالكامل. التنسيق كان سلس والنتيجة رائعة. النزلاء أشادوا بجودة الأثاث والتجهيزات." },
-    { id: 28, name: "م. ياسر المطيري", role: "مدير المشتريات - فندق إنتركونتيننتال", rating: 5, comment: "ألبا برو من الموردين المعتمدين عندنا من 5 سنوات. الجودة ثابتة والخدمة ممتازة. أسعارهم تنافسية جداً مقارنة بالجودة." },
-    { id: 29, name: "أ. عبدالعزيز الحماد", role: "المدير الإقليمي - فنادق دبل تري", rating: 5, comment: "التعامل مع ألبا برو يجعل العمل سهلاً. فريق محترف ومتفهم لاحتياجات الفنادق. التوصيل سريع والمنتجات أصلية." },
-    { id: 30, name: "م. فهد الدوسري", role: "مهندس معماري - مكتب هندسي", rating: 5, comment: "أرشح ألبا برو لكل عملائي في قطاع الضيافة. منتجاتهم عصرية وتواكب المعايير العالمية. فريق التصميم متعاون ومبدع." }
+    { id: 28, name: "م. ياسر المطيري", role: "مدير المشتريات - فندق إنتركونتيننتال", rating: 5, comment: "البا الحديثة التجارية من الموردين المعتمدين عندنا من 5 سنوات. الجودة ثابتة والخدمة ممتازة. أسعارهم تنافسية جداً مقارنة بالجودة." },
+    { id: 29, name: "أ. عبدالعزيز الحماد", role: "المدير الإقليمي - فنادق دبل تري", rating: 5, comment: "التعامل مع البا الحديثة التجارية يجعل العمل سهلاً. فريق محترف ومتفهم لاحتياجات الفنادق. التوصيل سريع والمنتجات أصلية." },
+    { id: 30, name: "م. فهد الدوسري", role: "مهندس معماري - مكتب هندسي", rating: 5, comment: "أرشح البا الحديثة التجارية لكل عملائي في قطاع الضيافة. منتجاتهم عصرية وتواكب المعايير العالمية. فريق التصميم متعاون ومبدع." }
   ];
 
   const tslider = document.querySelector('.testimonials-slider');
@@ -844,7 +850,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         if (modalQuote) {
           modalQuote.href = `https://wa.me/966562933331?text=${encodeURIComponent(
-            `السلام عليكم، أرغب بالاستفسار عن سعر منتج: ${name}`
+            `أهلاً، أرغب بطلب عرض سعر وتوفر لـ «${name}» — مع إمكانية تزويدكم بكمية المنشأة.`
           )}`;
         }
         lastFocused = document.activeElement;

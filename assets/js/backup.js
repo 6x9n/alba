@@ -8,7 +8,7 @@ const productsData = [
     description: "أمان بمعايير فندقية عبر بطاقات RFID مشفّرة — يقلّل إعادة البرمجة ويوفّر وقت فريق الاستقبال.",
     color: "ذهبي",
     size: "قياسي",
-    code: "BTS.1008484"
+    code: "BTS.1007475"
   },
   {
     id: "locks-02",
@@ -18,12 +18,12 @@ const productsData = [
     description: "أمان بمعايير فندقية عبر بطاقات RFID مشفّرة — يقلّل إعادة البرمجة ويوفّر وقت فريق الاستقبال.",
     color: "فضي",
     size: "قياسي",
-    code: "BTS.1008383"
+    code: "BTS.1007476"
   },
   {
     id: "locks-03",
     category: "locks",
-    title: "كالون إلكتروني ذكي",
+    title: "كالون إلكتروني صيني",
     image: "assets/images/products/01-locks/Asset 23.png",
     description: "أمان بمعايير فندقية عبر بطاقات RFID مشفّرة — يقلّل إعادة البرمجة ويوفّر وقت فريق الاستقبال.",
     color: "فضي",
@@ -33,7 +33,7 @@ const productsData = [
   {
     id: "locks-04",
     category: "locks",
-    title: "كالون إلكتروني ذكي",
+    title: "كالون إلكتروني صيني",
     image: "assets/images/products/01-locks/Asset 24.png",
     description: "أمان بمعايير فندقية عبر بطاقات RFID مشفّرة — يقلّل إعادة البرمجة ويوفّر وقت فريق الاستقبال.",
     color: "ذهبي",
@@ -171,7 +171,7 @@ const productsData = [
     code: "BTS.T6052"
   },
    {
-    id: "furn-table-03b",
+    id: "furn-table-03",
     category: "furniture",
     subcategory: "tables",
     title: "ﻃﺎوﻟﻪ ﺧﺪﻣﻪ رﺋﻴﺴﻴﻪ ﺳﻨﱰ ﻣﻘﻮس",
@@ -485,6 +485,176 @@ const productsData = [
     color: "أبيض",
     size: "30*35 cm - وزن 50 جرام",
     code: "BTS.411A"
+  },
+
+  // ==========================================
+  // 2. قسم الأثاث الفندقي (furniture)
+  // Subcategories: chairs, sofas, tables
+  // ==========================================
+  {
+    id: "furn-chair-01",
+    category: "furniture",
+    subcategory: "chairs",
+    title: "كرسي طعام بيج",
+    image: "assets/images/products/02-furniture/Asset 4.png",
+    description: "كرسي طعام فندقي فاخر بقواعد معدنية ذهبية متقاطعة.",
+    color: "بيج",
+    size: "460*520*930",
+    code: "BTS.T6008"
+  },
+  {
+    id: "furn-chair-02",
+    category: "furniture",
+    subcategory: "chairs",
+    title: "كرسي طعام أخضر",
+    image: "assets/images/products/02-furniture/Asset 3.png",
+    description: "كرسي طعام مخملي أخضر بتصميم عصري وأرجل ذهبية.",
+    color: "أخضر",
+    size: "460*520*930",
+    code: "BTS.T6009"
+  },
+  {
+    id: "furn-chair-03",
+    category: "furniture",
+    subcategory: "chairs",
+    title: "كرسي طعام أزرق",
+    image: "assets/images/products/02-furniture/Asset 2.png",
+    description: "كرسي طعام مخملي أزرق كحلي بتطريز فاخر.",
+    color: "أزرق",
+    size: "460*520*930",
+    code: "BTS.T6010"
+  },
+  {
+    id: "furn-chair-04",
+    category: "furniture",
+    subcategory: "chairs",
+    title: "كرسي متعدد الاستخدام",
+    image: "assets/images/products/02-furniture/Asset 9.png",
+    description: "كرسي مريح بذراعين للأجنحة والاستراحات الفندقية.",
+    color: "أخضر",
+    size: "قياسي",
+    code: "BTS.T7070"
+  },
+  {
+    id: "furn-chair-05",
+    category: "furniture",
+    subcategory: "chairs",
+    title: "كرسي طعام مقاس خاص",
+    image: "assets/images/products/02-furniture/Asset 8.png",
+    description: "كرسي طعام بإطار معدني ذهبي خلفي بارز.",
+    color: "أخضر",
+    size: "900*560*470",
+    code: "BTS.T6004"
+  },
+  {
+    id: "furn-chair-06",
+    category: "furniture",
+    subcategory: "chairs",
+    title: "كرسي مكتب فاخر",
+    image: "assets/images/products/02-furniture/Asset 7.png",
+    description: "كرسي مكتب مخمل أسود بقواعد ذهبية متينة.",
+    color: "أسود",
+    size: "800*500*500",
+    code: "BTS.T6012"
+  },
+  {
+    id: "furn-sofa-01",
+    category: "furniture",
+    subcategory: "sofas",
+    title: "كرسي صالة أورانج",
+    image: "assets/images/products/02-furniture/Asset 11.png",
+    description: "كرسي صالة دائر بتصميم جلد فاخر ولون برتقالي مميز.",
+    color: "برتقالي",
+    size: "800*700*700",
+    code: "BTS.6060A"
+  },
+  {
+    id: "furn-sofa-02",
+    category: "furniture",
+    subcategory: "sofas",
+    title: "كنب ثنائي المقعد",
+    image: "assets/images/products/02-furniture/Asset 10.png",
+    description: "كنبة مخملية ثنائية باللون البرتقالي للوبيات والأجنحة.",
+    color: "برتقالي",
+    size: "1800*900*800",
+    code: "BTS.A01*2-LP9097-18"
+  },
+  {
+    id: "furn-table-02",
+    category: "furniture",
+    subcategory: "tables",
+    title: "طاولة خدمة فرعية مقوسة (رخام أسود)",
+    image: "assets/images/products/02-furniture/Asset 5.png",
+    description: "طاولة خدمة جانبية بأسطح رخامية سوداء وقواعد ذهبية.",
+    color: "أسود",
+    size: "500*400*400",
+    code: "BTS.T6049"
+  },
+  {
+    id: "furn-table-03",
+    category: "furniture",
+    subcategory: "tables",
+    title: "طاولة خدمة فرعية مقوسة (رخام أبيض)",
+    image: "assets/images/products/02-furniture/Asset 6.png",
+    description: "طاولة خدمة جانبية رخام أبيض كلاسيك.",
+    color: "أبيض",
+    size: "500*400*400",
+    code: "BTS.T6048"
+  },
+  {
+    id: "furn-table-04",
+    category: "furniture",
+    subcategory: "tables",
+    title: "طاولة خدمة رئيسية سنتر مقوسة",
+    image: "assets/images/products/02-furniture/Asset 14.png",
+    description: "طاولة سنتر رخام أبيض للصالات واللوبي.",
+    color: "أبيض",
+    size: "750*800*1400",
+    code: "BTS.T6046"
+  },
+  {
+    id: "furn-table-05",
+    category: "furniture",
+    subcategory: "tables",
+    title: "طاولة خدمة رئيسية سنتر مقوسة (أسود)",
+    image: "assets/images/products/02-furniture/Asset 16.png",
+    description: "طاولة وسط بوسط الصالة بقواعد مجوفة وقلم أسود فاخر.",
+    color: "أسود",
+    size: "500*600*1200",
+    code: "BTS.T6060"
+  },
+  {
+    id: "furn-table-06",
+    category: "furniture",
+    subcategory: "tables",
+    title: "طاولة مكتب بدرج",
+    image: "assets/images/products/02-furniture/Asset 20.png",
+    description: "طاولة مكتب فندقية بتصميم مدرن ولون أبيض.",
+    color: "أبيض",
+    size: "750*600*1000",
+    code: "BTS.T6044"
+  },
+  {
+    id: "furn-table-07",
+    category: "furniture",
+    subcategory: "tables",
+    title: "طاولة مفرد بدرج (كومودينو)",
+    image: "assets/images/products/02-furniture/Asset 21.png",
+    description: "طاولة بجانب السرير متكاملة بدرج تخزين.",
+    color: "أبيض",
+    size: "550*480*580",
+    code: "BTS.T6037"
+  },
+  {
+    id: "furn-table-08",
+    category: "furniture",
+    subcategory: "tables",
+    title: "طاولة زجاجية مربعة",
+    image: "assets/images/products/02-furniture/Asset 22.png",
+    description: "طاولة جانبية بسطح زجاجي وهيكل هرمي ذهبي.",
+    color: "أسود / شفاف",
+    size: "قياسي",
+    code: "BTS"
   },
 
   // trash 
