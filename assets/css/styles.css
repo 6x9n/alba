@@ -2330,6 +2330,9 @@ section[id],
 }
 
 .product-item {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
   background: var(--white);
   border: 1px solid rgba(20,32,43,0.06);
   border-top: 3px solid var(--gold);
@@ -2362,10 +2365,15 @@ section[id],
   object-fit: contain;
   border-radius: 6px;
   margin: 1.5rem auto 0;
-  background: transparent;
+  background: #fff;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(20, 32, 43, 0.08);
 }
 
 .product-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
   padding: 1.5rem 1.25rem 1.5rem;
 }
 
@@ -2392,11 +2400,32 @@ section[id],
   margin: 0.2rem 0.2rem 0 0;
 }
 
+.product-footer {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.product-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  align-items: flex-start;
+}
+
+.product-meta.is-horizontal {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
 /* Product inquiry CTA — pre-filled WhatsApp quote */
 .product-actions {
   display: flex;
   gap: 0.5rem;
-  margin-top: 0.9rem;
+  margin-top: 0;
 }
 
 .product-quote {

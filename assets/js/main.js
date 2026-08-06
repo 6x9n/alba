@@ -75,10 +75,12 @@ document.addEventListener("DOMContentLoaded", () => {
       <div class="product-info">
         <h3>${escapeHtml(name)}</h3>
         <p class="product-desc">${escapeHtml(p.description || '')}</p>
-        ${specs}
-        <div class="product-actions">
-          <a class="product-quote" href="${quoteHref}" target="_blank" rel="noreferrer" aria-label="اطلب سعر ${escapeHtml(name)} الآن عبر واتساب">${WHATSAPP_SVG}<span>اطلب سعراً الآن</span></a>
-          <button type="button" class="product-view" aria-label="عرض تفاصيل ${escapeHtml(name)}">${EYE_SVG}</button>
+        <div class="product-footer">
+          ${specs ? `<div class="product-meta">${specs}</div>` : ''}
+          <div class="product-actions">
+            <a class="product-quote" href="${quoteHref}" target="_blank" rel="noreferrer" aria-label="اطلب سعر ${escapeHtml(name)} الآن عبر واتساب">${WHATSAPP_SVG}<span>اطلب سعراً الآن</span></a>
+            <button type="button" class="product-view" aria-label="عرض تفاصيل ${escapeHtml(name)}">${EYE_SVG}</button>
+          </div>
         </div>
       </div>
     </article>`;
@@ -161,6 +163,17 @@ document.addEventListener("DOMContentLoaded", () => {
     return [...order, ...extras];
   };
 
+  const adjustBadgeLayout = () => {
+    document.querySelectorAll('.product-item').forEach((item) => {
+      const desc = item.querySelector('.product-desc');
+      const meta = item.querySelector('.product-meta');
+      if (!desc || !meta) return;
+      const lineHeight = parseFloat(getComputedStyle(desc).lineHeight) || 20;
+      const lineCount = Math.round(desc.getBoundingClientRect().height / lineHeight);
+      meta.classList.toggle('is-horizontal', lineCount > 1);
+    });
+  };
+
   const filterHost = document.getElementById('categoryFilters');
   const productSectionsHost = document.getElementById('productSections');
 
@@ -203,8 +216,10 @@ document.addEventListener("DOMContentLoaded", () => {
         btn.setAttribute('aria-pressed', String(isActive));
       });
       applyCategoryFilter(filter);
+      adjustBadgeLayout();
     });
     applyCategoryFilter('all');
+    adjustBadgeLayout();
   }
 
   /* ---- Footer year ---- */
@@ -397,6 +412,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (window.innerWidth > 992) {
       closeDrawer();
     }
+    adjustBadgeLayout();
   });
 
   /* ---- Scroll reveal animations ---- */
