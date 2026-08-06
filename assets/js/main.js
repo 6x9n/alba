@@ -5,12 +5,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* ---- Products page: data-driven rendering (categories + sub-categories) ---- */
   const CATEGORY_META = {
-    locks:       { label: 'الأقفال وأنظمة الدخول الذكية' },
-    furniture:   { label: 'الأثاث والتجهيزات الفندقية' },
-    furnishings: { label: 'البياضات والمفروشات الفندقية' },
-    equipment:   { label: 'معدات التشغيل ومستلزمات الغرف' },
-    trolleys:    { label: 'عربات الخدمة والنقل' },
-    hardware:    { label: 'مستلزمات الأقفال والأبواب' }
+    locks:       { label: 'الانظمه الالكترونيه والبرمجيات' },
+    furniture:   { label: 'الاثاث والديكور الفندقي' },
+    furnishings: { label: 'المفروشات الفندقيه' },
+    equipment:   { label: 'المستلزمات الفندقية' },
+    trolleys:    { label: 'المعدات الفندقية' },
+    hardware:    { label: 'اكسسوارات الابواب' },
+    healthtools: { label: 'أدوات الصحة' },
+    safetytools: { label: 'أدوات السلامة' }
   };
 
   const SUBCATEGORY_LABELS = {
@@ -25,7 +27,6 @@ document.addEventListener("DOMContentLoaded", () => {
     'safes': 'خزائن الأمانات',
     'kettles': 'غلايات الشاي',
     'bathroom-acc': 'مستلزمات الحمام',
-    'health-tools': 'ادوات الصحيه',
     'lobby': 'تجهيزات اللوبي',
     'room-acc': 'مستلزمات الغرف',
     'housekeeping': 'عربات التنظيف',
